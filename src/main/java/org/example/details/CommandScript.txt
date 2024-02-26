@@ -1,0 +1,3 @@
+show
+insert 676 P676 19 9
+save
