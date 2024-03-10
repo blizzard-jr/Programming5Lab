@@ -14,7 +14,9 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.Objects;
 import static org.example.details.StorageOfManagers.*;
 
-
+/**
+ * Класс - объект коллекции
+ */
 public class StudyGroup implements Comparable<StudyGroup> {
     private String name; //Поле не может быть null, Строка не может быть пустой
     private long studentsCount; //Значение поля должно быть больше 0
