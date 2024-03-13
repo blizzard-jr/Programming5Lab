@@ -115,6 +115,7 @@ public class CollectionManager {
      */
     public void update(Integer id, String name, long studentsCount, long shouldBeExpelled){
         StudyGroup element = userInterface.studyGroupInit(name, studentsCount, shouldBeExpelled);
+        element.setId(id);
         storage.replaceElement(id, element);
     }
 
@@ -161,7 +162,7 @@ public class CollectionManager {
      * @param acceptEmpty       Разрешено ли значение пустой строки
      */
     public boolean validate(Object obj, boolean acceptEmpty){
-        return !(!acceptEmpty & obj == "");
+        return !(!acceptEmpty & (obj == "" || obj == null));
     }
 
     /**

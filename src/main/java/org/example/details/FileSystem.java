@@ -38,6 +38,10 @@ public class FileSystem {
         return map_one;
     }
 
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
     /**
      * Метод для запоминания пути к файлу с которым работает коллекция
      * @param s
@@ -54,7 +58,7 @@ public class FileSystem {
         FileOutputStream f = null;
         try{
             f = new FileOutputStream(fileName);
-        }catch(FileNotFoundException e){
+        }catch(FileNotFoundException | NullPointerException e){
             throw new IllegalValueException("Проблема с файлом");
         }
         OutputStreamWriter writer = new OutputStreamWriter(f);
