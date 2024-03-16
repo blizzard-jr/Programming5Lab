@@ -70,6 +70,10 @@ public class CommandsManager {
         String[] args = Arrays.copyOfRange(str, 1, str.length);
         command.execute(args);
     }
+    public void executeFullInsert(String[] data){
+        String[] str = parseCommand(data[0]);
+
+    }
 
     public ArrayList<String> getCommandList() {
         return commandList;

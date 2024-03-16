@@ -192,7 +192,15 @@ public class Storage {
      * @param key
      */
     public void removeElement(int key){
-        map.remove(key);
+        if(map.containsKey(key)){
+            map.remove(key);
+            System.out.println("Объект удалён успешно");
+        }
+        else{
+            System.out.println("Элемент в коллекции отсутствует");
+        }
+
+
     }
 
     /**

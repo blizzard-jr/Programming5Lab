@@ -10,6 +10,8 @@ import exception.NoSuchCommandException;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Класс отвечает за работу с файлами
@@ -79,9 +81,25 @@ public class FileSystem {
      */
     public void parseScript(FileInputStream stream)  {
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        //Pattern p = Pattern.compile("insert");
         try {
+            //Matcher match = p.matcher(reader.readLine());
             while (reader.ready()) {
-                StorageOfManagers.commandsManager.executeCommand(reader.readLine());
+                String string = reader.readLine();
+                if(string.split(" ")[0].equals("insert")){
+                    String[] str = Arrays.copyOfRange(string.split(" "), 1, string.split(" ").length);
+                    ArrayList<String> data = new ArrayList<>(Arrays.asList(str));
+                    for (int i = 0; i < 12; i++) {
+                        data.add(reader.readLine());
+                    }
+                    StorageOfManagers.collectionManager.insertFormScript(data);
+                }
+                else if(string.isEmpty()){
+                    break;
+                }
+                else{
+                    StorageOfManagers.commandsManager.executeCommand(string);
+                }
             }
         }catch(IOException | NoSuchCommandException e){
             throw new IllegalValueException("Проблема с парсингом файла или команда не найдена");
