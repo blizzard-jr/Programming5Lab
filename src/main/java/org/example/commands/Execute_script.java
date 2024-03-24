@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Execute_script extends Command{
-    Set<FileInputStream> files = new HashSet<FileInputStream>();
+    Set<String> files = new HashSet<String>();
 
     public Execute_script(){
         super("execute_script", "Считать и исполнить скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме");
@@ -24,8 +24,8 @@ public class Execute_script extends Command{
         } catch (FileNotFoundException e) {
             throw new NoSuchCommandException("Ошибка в имени файла");
         }
-        if(!files.contains(stream)){
-            files.add(stream);
+        if(!files.contains(args[0])){
+            files.add(args[0]);
             StorageOfManagers.collectionManager.execute_script(stream);
             System.out.println("Выполнение скрипта завершено");
         }

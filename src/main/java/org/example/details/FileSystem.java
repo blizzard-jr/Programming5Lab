@@ -86,13 +86,19 @@ public class FileSystem {
             //Matcher match = p.matcher(reader.readLine());
             while (reader.ready()) {
                 String string = reader.readLine();
-                if(string.split(" ")[0].equals("insert")){
+                if(string.split(" ")[0].equals("insert") || string.split(" ")[0].equals("update")){
                     String[] str = Arrays.copyOfRange(string.split(" "), 1, string.split(" ").length);
                     ArrayList<String> data = new ArrayList<>(Arrays.asList(str));
                     for (int i = 0; i < 12; i++) {
                         data.add(reader.readLine());
                     }
-                    StorageOfManagers.collectionManager.insertFormScript(data);
+                    if(string.split(" ")[0].equals("insert")){
+                        StorageOfManagers.collectionManager.insertFormScript(data);
+                    }
+                    else if(string.split(" ")[0].equals("update")){
+                        StorageOfManagers.collectionManager.updateFromScript(data);
+                    }
+
                 }
                 else if(string.isEmpty()){
                     break;

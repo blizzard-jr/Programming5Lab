@@ -163,7 +163,7 @@ public class StudyGroup implements Comparable<StudyGroup> {
     }
     @Override
     public int hashCode(){
-        return Objects.hash(this.name, this.groupAdmin);
+        return Objects.hash(this.name, this.creationDate, this.id);
     }
 
 
