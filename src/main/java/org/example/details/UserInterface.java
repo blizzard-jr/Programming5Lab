@@ -34,8 +34,14 @@ public class UserInterface {
             if(answer.isEmpty()){
                 try{
                     return fileSystem.parseToList(fileName);
-                } catch(IOException e){
-                    System.out.println("Не удалось получить данные из указанного файла, введите новое имя, \"Enter\" - для использования пустой коллекции или 1 для выхода: ");
+                }
+                catch(IOException e){
+                    if(e.getClass() == com.fasterxml.jackson.databind.exc.InvalidDefinitionException.class){
+                        System.out.println("Значения в файле не валидны или нарушен формат json, введите новое имя, \\\"Enter\\\" - для использования пустой коллекции или 1 для выхода: \"");
+                    }
+                    else{
+                        System.out.println("Не удалось получить данные из указанного файла, введите новое имя, \"Enter\" - для использования пустой коллекции или 1 для выхода: ");
+                    }
                     String ans = scanner.nextLine();
                     if(ans.equals("1")){
                         System.out.println("Всего доброго");

@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
  */
 public class FileSystem {
     private String fileName;
+    private Scanner scanner = new Scanner(System.in);
 
     /**
      * Метод десериализует информацию из файла в Map POJO
@@ -58,10 +59,20 @@ public class FileSystem {
      */
     public void parseToFile(LinkedHashMap<Integer, StudyGroup> map)  {
         FileOutputStream f = null;
-        try{
-            f = new FileOutputStream(fileName);
-        }catch(FileNotFoundException | NullPointerException e){
-            throw new IllegalValueException("Проблема с файлом");
+        while(true) {
+            try {
+                f = new FileOutputStream(fileName);
+            } catch (FileNotFoundException | NullPointerException e) {
+                System.out.println("Выполнение команды невозможно, передайте новое имя файла или \"Enter\" - для пропуска");
+                String s = scanner.nextLine();
+                if (s.isEmpty()) {
+                    throw new IllegalValueException("");
+                } else {
+                    fileName = s;
+                    continue;
+                }
+            }
+            break;
         }
         OutputStreamWriter writer = new OutputStreamWriter(f);
         ObjectMapper o = new ObjectMapper();

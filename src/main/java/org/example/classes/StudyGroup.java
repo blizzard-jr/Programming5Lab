@@ -36,7 +36,7 @@ public class StudyGroup implements Comparable<StudyGroup> {
     private Semester semesterEnum; //Поле не может быть null
     private Person groupAdmin; //Поле может быть null
 
-
+    @JsonCreator
     public StudyGroup(String name, long studentsCount, long shouldBeExpelled, Coordinates coordinates, FormOfEducation formOfEducation, Semester semesterEnum, Person groupAdmin) {
         setName(name);
         setStudentsCount(studentsCount);
@@ -58,7 +58,7 @@ public class StudyGroup implements Comparable<StudyGroup> {
 
     public void setName(String name) {
         if(!collectionManager.validate(name, false)){
-            throw new IllegalValueException("Поле name не может быть пустым или равняться нулю");
+            throw new IllegalValueException("Поле name не может быть пустым");
         }
         else {
             this.name = name;
