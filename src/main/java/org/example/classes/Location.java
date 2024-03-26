@@ -12,8 +12,8 @@ public class Location {
     public Location(Long x, long y, int z, String name){
         setName(name);
         setX(x);
-        this.y = y;
-        this.z = z;
+        setY(y);
+        setZ(z);
     }
     public Location(){}
     public void setX(Long x) {

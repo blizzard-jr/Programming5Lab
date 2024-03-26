@@ -27,23 +27,41 @@ public class UserInterface {
      * @param s     Имя файла
      * @return map
      */
-    public LinkedHashMap<Integer, StudyGroup> readFile(String s) {
-        LinkedHashMap<Integer, StudyGroup> map;
-        while (true) {
-            String data = readWithMessage(s);
-            try {
-                map = fileSystem.parseToList(data);
-            } catch(IOException e) {
-                writeErr("Проблема с файлом, повторите ввод: ");
-                continue;
+    public LinkedHashMap<Integer, StudyGroup> readFile(String s, String fileName) {
+        writeln(s);
+        String answer = scanner.nextLine();
+        while(true){
+            if(answer.isEmpty()){
+                try{
+                    return fileSystem.parseToList(fileName);
+                }
+                catch(IOException e){
+                    if(e.getClass() == com.fasterxml.jackson.databind.exc.InvalidDefinitionException.class){
+                        System.out.println("Значения в файле не валидны или нарушен формат json, введите новое имя, \\\"Enter\\\" - для использования пустой коллекции или 1 для выхода: \"");
+                    }
+                    else{
+                        System.out.println("Не удалось получить данные из указанного файла, введите новое имя, \"Enter\" - для использования пустой коллекции или 1 для выхода: ");
+                    }
+                    String ans = scanner.nextLine();
+                    if(ans.equals("1")){
+                        System.out.println("Всего доброго");
+                        System.exit(0);
+                        }
+                    else if(ans.isEmpty()){
+                        System.out.println("Будет использована пустая коллекция");
+                        return new LinkedHashMap<>();
+                        }
+                    else {
+                        fileName = ans;
+                        }
+                    }
+                }
+            else {
+                fileSystem.setFileName(fileName);
+                return new LinkedHashMap<>();
+                }
             }
-            break;
         }
-        return map;
-    }
-    public boolean hasNextLine(){
-        return scanner.hasNextLine();
-    }
 
     /**
      * Метод читает ввод пользователя с предварительным выводом сообщения, внутри используется валидация для строк
@@ -107,6 +125,10 @@ public class UserInterface {
     }
     public Color colorInit(String message){
         writeln(message);
+        writeln("Допустимые значения: ");
+        for(Color color : Color.values()){
+            System.out.println(color.getRus());
+        }
         String s = scanner.nextLine();
         while(!Color.findColor(s) || s.isEmpty()){
             writeErr("Значение константы не распознано, повторите ввод");
@@ -122,6 +144,10 @@ public class UserInterface {
      */
     public FormOfEducation formInit(String message){
         writeln(message);
+        writeln("Допустимые значения: ");
+        for(FormOfEducation form : FormOfEducation.values()){
+            System.out.println(form.getRus());
+        }
         String s = scanner.nextLine();
         while(!FormOfEducation.findForm(s) || s.isEmpty()){
             writeErr("Значение константы не распознано, повторите ввод");
@@ -129,13 +155,21 @@ public class UserInterface {
         }
         return FormOfEducation.getForm(s);
     }
+    public boolean hasNextLine(){
+        return scanner.hasNextLine();
+    }
     /**
      * Метод инициализирует enum Semester - поле элемента коллекции
      * @param message
      * @return FormOfEducation
      */
+
     public Semester semInit(String message){
         writeln(message);
+        writeln("Допустимые значения: ");
+        for(Semester sem : Semester.values()){
+            System.out.println(sem.getRus());
+        }
         String s = scanner.nextLine();
         while(!Semester.findSem(s) || s.isEmpty()){
             writeErr("Значение константы не распознано, повторите ввод");

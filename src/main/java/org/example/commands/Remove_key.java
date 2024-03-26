@@ -19,6 +19,5 @@ public class Remove_key extends Command{
             throw new IllegalValueException("Ошибка в аргументе команды");
         }
         StorageOfManagers.collectionManager.remove(key);
-        System.out.println("Объект удалён успешно");
     }
 }

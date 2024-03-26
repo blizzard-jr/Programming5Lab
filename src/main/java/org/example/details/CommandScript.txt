@@ -1,3 +1,17 @@
 show
 insert 676 P676 19 9
-save
+очное
+четвёртый
+-234
+-1
+Дарья
+89
+52
+оранжевый
+13
+Кронва
+11
+-645
+show
+execute_script C:\Users\Кот\IdeaProjects\Programming5Lab\Programming5Lab\src\main\java\org\example\details\AnotherOneScript.txt
+help

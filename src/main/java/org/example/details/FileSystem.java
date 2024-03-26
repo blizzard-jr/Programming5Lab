@@ -10,12 +10,15 @@ import exception.NoSuchCommandException;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Класс отвечает за работу с файлами
  */
 public class FileSystem {
     private String fileName;
+    private Scanner scanner = new Scanner(System.in);
 
     /**
      * Метод десериализует информацию из файла в Map POJO
@@ -38,6 +41,10 @@ public class FileSystem {
         return map_one;
     }
 
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
     /**
      * Метод для запоминания пути к файлу с которым работает коллекция
      * @param s
@@ -52,10 +59,20 @@ public class FileSystem {
      */
     public void parseToFile(LinkedHashMap<Integer, StudyGroup> map)  {
         FileOutputStream f = null;
-        try{
-            f = new FileOutputStream(fileName);
-        }catch(FileNotFoundException e){
-            throw new IllegalValueException("Проблема с файлом");
+        while(true) {
+            try {
+                f = new FileOutputStream(fileName);
+            } catch (FileNotFoundException | NullPointerException e) {
+                System.out.println("Выполнение команды невозможно, передайте новое имя файла или \"Enter\" - для пропуска");
+                String s = scanner.nextLine();
+                if (s.isEmpty()) {
+                    throw new IllegalValueException("");
+                } else {
+                    fileName = s;
+                    continue;
+                }
+            }
+            break;
         }
         OutputStreamWriter writer = new OutputStreamWriter(f);
         ObjectMapper o = new ObjectMapper();
@@ -75,9 +92,31 @@ public class FileSystem {
      */
     public void parseScript(FileInputStream stream)  {
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        //Pattern p = Pattern.compile("insert");
         try {
+            //Matcher match = p.matcher(reader.readLine());
             while (reader.ready()) {
-                StorageOfManagers.commandsManager.executeCommand(reader.readLine());
+                String string = reader.readLine();
+                if(string.split(" ")[0].equals("insert") || string.split(" ")[0].equals("update")){
+                    String[] str = Arrays.copyOfRange(string.split(" "), 1, string.split(" ").length);
+                    ArrayList<String> data = new ArrayList<>(Arrays.asList(str));
+                    for (int i = 0; i < 12; i++) {
+                        data.add(reader.readLine());
+                    }
+                    if(string.split(" ")[0].equals("insert")){
+                        StorageOfManagers.collectionManager.insertFormScript(data);
+                    }
+                    else if(string.split(" ")[0].equals("update")){
+                        StorageOfManagers.collectionManager.updateFromScript(data);
+                    }
+
+                }
+                else if(string.isEmpty()){
+                    break;
+                }
+                else{
+                    StorageOfManagers.commandsManager.executeCommand(string);
+                }
             }
         }catch(IOException | NoSuchCommandException e){
             throw new IllegalValueException("Проблема с парсингом файла или команда не найдена");
