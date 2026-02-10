@@ -22,9 +22,21 @@ public class Storage {
      * @param map
      */
     public void mapInit(LinkedHashMap<Integer, StudyGroup> map){
-        this.map = map;
+        List<StudyGroup> list = new ArrayList<>(map.values());
+        Collections.sort(list);
         for(Integer key : map.keySet()){
             this.mapKey.put(map.get(key).getId(), key);
+        }
+        for(StudyGroup el : list){
+            this.map.put(findKey(el.getId()), el);
+        }
+    }
+    public void sort(){
+        List<StudyGroup> list = new ArrayList<>(map.values());
+        Collections.sort(list);
+        map.clear();
+        for(StudyGroup el : list){
+            this.map.put(findKey(el.getId()), el);
         }
     }
 
@@ -68,10 +80,15 @@ public class Storage {
      * @param form
      */
     public void filterForm(FormOfEducation form){
+        boolean flag = false;
         for(StudyGroup group : map.values()){
             if(group.getFormOfEducation().compareTo(form) < 0){
                 System.out.println(group);
+                flag = true;
             }
+        }
+        if(!flag){
+            System.out.println("Элементов, у которых значение поля FormOfEducation меньше заданного вами значения не нашлось");
         }
     }
     /**
@@ -81,7 +98,7 @@ public class Storage {
     public void countForm(FormOfEducation form){
         int count = 0;
         for(StudyGroup group : map.values()){
-            if(group.getFormOfEducation().compareTo(form) > 0){
+            if(group.getFormOfEducation().compareTo(form) < 0){
                 count+=1;
             }
         }
@@ -141,6 +158,7 @@ public class Storage {
     public void replaceElement(long id, StudyGroup el){
         if(map.replace(mapKey.get(id), getObj(id), el)){
             System.out.println("замена прошла успешно, " + map.get(mapKey.get(id)));
+            sort();
         }
         else{
             System.out.println("Замена не удалась, что-то пошло не так");
@@ -174,7 +192,15 @@ public class Storage {
      * @param key
      */
     public void removeElement(int key){
-        map.remove(key);
+        if(map.containsKey(key)){
+            map.remove(key);
+            System.out.println("Объект удалён успешно");
+        }
+        else{
+            System.out.println("Элемент в коллекции отсутствует");
+        }
+
+
     }
 
     /**
@@ -195,6 +221,8 @@ public class Storage {
     }
     public void putWithKey(int key, StudyGroup group){
         map.put(key, group);
+        mapKey.put(group.getId(), key);
+        sort();
     }
     @Override
     public String toString(){

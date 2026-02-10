@@ -12,18 +12,33 @@ import java.util.*;
  */
 
 public class Main {
-    //C:\\Users\\Кот\\IdeaProjects\\ProgLab5\\src\\details\\CommandScript.txt
-    //"C:\\Users\\Кот\\IdeaProjects\\ProgLab5\\src\\details\\Data.json");
+    //C:\Temp\Programming5Lab\src\main\java\org\example\details\CommandScript.txt
+    //"C:\Temp\Programming5Lab\src\main\java\org\example\details\Data.json";
     public static void main(String[] args) {
+        String fileName = "";
+        try{
+            fileName = args[0];
+        }catch(ArrayIndexOutOfBoundsException e){
+            System.out.println("Кажется, вы забыли передать имя файла");
+        }
+        //Журнал КОД от яндекс, почитать
+        System.out.println(fileName);
         Storage st = new Storage();
         FileSystem file = new FileSystem();
         UserInterface user = new UserInterface();
         CommandsManager manage = new CommandsManager();
         CollectionManager collection = new CollectionManager();
         StorageOfManagers storageOfManagers = new StorageOfManagers(collection, user, file, manage, st);
-        LinkedHashMap<Integer, StudyGroup> map = user.readFile("Перед началом работы введите имя файла для инициализации коллекции: ");
+        LinkedHashMap<Integer, StudyGroup> map;
+        if(!fileName.isEmpty()){
+            map = user.readFile("Желаете инициализировать коллекцию из файла? \"Enter\" - Да; Another - Нет: ", fileName);
+        }
+        else{
+            System.out.println("Будет использована пустая коллекция");
+            map = new LinkedHashMap<>();
+        }
         StorageOfManagers.storage.mapInit(map);
-        user.writeln("Файл обработан, коллекция инициализирована. Программа готова к работе");
+        user.writeln("Программа готова к работе");
         while(user.hasNextLine()){
             try {
                 manage.executeCommand(user.readWithMessage(""));

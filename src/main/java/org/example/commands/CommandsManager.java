@@ -65,10 +65,14 @@ public class CommandsManager {
      */
     public void executeCommand(String s) throws NoSuchCommandException {
         String[] str = parseCommand(s);
-        Command command = getCommand(str[0]);
+        Command command = getCommand(str[0].toLowerCase());
         commandList.add(str[0]);
         String[] args = Arrays.copyOfRange(str, 1, str.length);
         command.execute(args);
+    }
+    public void executeFullInsert(String[] data){
+        String[] str = parseCommand(data[0]);
+
     }
 
     public ArrayList<String> getCommandList() {

@@ -19,6 +19,30 @@ public class CollectionManager {
     public void execute_script(FileInputStream f) {
         fileSystem.parseScript(f);
     }
+    public void insertFormScript(ArrayList<String> args){
+        try{
+            int key = Integer.parseInt(args.get(0));
+            long studentsCount = Long.parseLong(args.get(2));
+            long shouldBeExpelled = Long.parseLong(args.get(3));
+            FormOfEducation form = FormOfEducation.getForm(args.get(4));
+            Semester sem = Semester.getSem(args.get(5));
+            float coordinatesX = Float.parseFloat(args.get(6));
+            double coordinatesY = Double.parseDouble(args.get(7));
+            Float height = Float.parseFloat(args.get(9));
+            double weight = Double.parseDouble(args.get(10));
+            Color color = Color.getColor(args.get(11));
+            Long x = Long.parseLong(args.get(12));
+            long y = Long.parseLong(args.get(14));
+            int z = Integer.parseInt(args.get(15));
+            Location loc = new Location(x, y, z, args.get(13));
+            Person admin = new Person(args.get(8), height, weight, color, loc);
+            Coordinates coord = new Coordinates(coordinatesX, coordinatesY);
+            StudyGroup el = new StudyGroup(args.get(1), studentsCount, shouldBeExpelled, coord, form, sem, admin);
+            storage.putWithKey(key, el);
+        }catch(NumberFormatException | IllegalValueException e){
+            throw new IllegalValueException("Значения команды insert  в скрипте не валидны");
+        }
+    }
 
     /**
      * Метод для исполнения команды show
@@ -88,12 +112,38 @@ public class CollectionManager {
     }
 
      */
+    public void updateFromScript(ArrayList<String> args){
+        try{
+            int id = Integer.parseInt(args.get(0));
+            long studentsCount = Long.parseLong(args.get(2));
+            long shouldBeExpelled = Long.parseLong(args.get(3));
+            FormOfEducation form = FormOfEducation.getForm(args.get(4));
+            Semester sem = Semester.getSem(args.get(5));
+            float coordinatesX = Float.parseFloat(args.get(6));
+            double coordinatesY = Double.parseDouble(args.get(7));
+            Float height = Float.parseFloat(args.get(9));
+            double weight = Double.parseDouble(args.get(10));
+            Color color = Color.getColor(args.get(11));
+            Long x = Long.parseLong(args.get(12));
+            long y = Long.parseLong(args.get(14));
+            int z = Integer.parseInt(args.get(15));
+            Location loc = new Location(x, y, z, args.get(13));
+            Person admin = new Person(args.get(8), height, weight, color, loc);
+            Coordinates coord = new Coordinates(coordinatesX, coordinatesY);
+            StudyGroup el = new StudyGroup(args.get(1), studentsCount, shouldBeExpelled, coord, form, sem, admin);
+            el.setId(id);
+            storage.replaceElement(id, el);
+        }catch(NumberFormatException | IllegalValueException e){
+            throw new IllegalValueException("Значения команды update в скрипте не валидны");
+        }
+    }
 
     /**
      * Метод, используя методы Storage добавляет новый элемент с заданным ключом в коллекцию, а также добавляет его в коллекцию ключей
      * @param element
      * @param arg
      */
+
     public void insertWithKey(StudyGroup element, String arg){
         Integer key;
         try{
@@ -115,6 +165,7 @@ public class CollectionManager {
      */
     public void update(Integer id, String name, long studentsCount, long shouldBeExpelled){
         StudyGroup element = userInterface.studyGroupInit(name, studentsCount, shouldBeExpelled);
+        element.setId(id);
         storage.replaceElement(id, element);
     }
 
@@ -161,7 +212,7 @@ public class CollectionManager {
      * @param acceptEmpty       Разрешено ли значение пустой строки
      */
     public boolean validate(Object obj, boolean acceptEmpty){
-        return !(!acceptEmpty & obj == "");
+        return !(!acceptEmpty & (obj.equals("") || obj == null));
     }
 
     /**

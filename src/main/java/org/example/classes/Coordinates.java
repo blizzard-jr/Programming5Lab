@@ -11,8 +11,8 @@ public class Coordinates {
     private double y; //Значение поля должно быть больше -574
 
     public Coordinates(float x, double y){
-        this.x = x;
-        this.y = y;
+        setX(x);
+        setY(y);
     }
     public Coordinates(){}
     public float getX(){

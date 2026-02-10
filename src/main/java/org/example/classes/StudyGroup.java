@@ -14,7 +14,9 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.Objects;
 import static org.example.details.StorageOfManagers.*;
 
-
+/**
+ * Класс - объект коллекции
+ */
 public class StudyGroup implements Comparable<StudyGroup> {
     private String name; //Поле не может быть null, Строка не может быть пустой
     private long studentsCount; //Значение поля должно быть больше 0
@@ -24,12 +26,17 @@ public class StudyGroup implements Comparable<StudyGroup> {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy-HH:mm:ss")
     private java.time.LocalDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
-    private final Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+
+    public void setId(int id) {
+        this.id = (long) id;
+    }
+
+    private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private FormOfEducation formOfEducation; //Поле не может быть null
     private Semester semesterEnum; //Поле не может быть null
     private Person groupAdmin; //Поле может быть null
 
-
+    @JsonCreator
     public StudyGroup(String name, long studentsCount, long shouldBeExpelled, Coordinates coordinates, FormOfEducation formOfEducation, Semester semesterEnum, Person groupAdmin) {
         setName(name);
         setStudentsCount(studentsCount);
@@ -51,7 +58,7 @@ public class StudyGroup implements Comparable<StudyGroup> {
 
     public void setName(String name) {
         if(!collectionManager.validate(name, false)){
-            throw new IllegalValueException("Поле name не может быть пустым или равняться нулю");
+            throw new IllegalValueException("Поле name не может быть пустым");
         }
         else {
             this.name = name;
@@ -156,7 +163,7 @@ public class StudyGroup implements Comparable<StudyGroup> {
     }
     @Override
     public int hashCode(){
-        return Objects.hash(this.name, this.groupAdmin);
+        return Objects.hash(this.name, this.creationDate, this.id);
     }
 
 
